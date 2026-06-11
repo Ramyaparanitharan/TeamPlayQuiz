@@ -12,7 +12,6 @@ function Results({ score, total, user, onGoHome, onLeaderboard }) {
         const { error: insertError } = await supabase.from('submissions').insert({
           user_id: user.user_id,
           score: score,
-          total_questions: total,
           submitted_at: new Date().toISOString(),
         })
         if (insertError) throw insertError
