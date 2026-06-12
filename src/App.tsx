@@ -118,8 +118,12 @@ function App() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as User
-        setUser(parsed)
-        setPage(parsed.role === 'admin' ? 'leaderboard' : 'quiz')
+        if (!parsed.role || (parsed.role !== 'admin' && parsed.role !== 'player')) {
+          localStorage.removeItem('user')
+        } else {
+          setUser(parsed)
+          setPage(parsed.role === 'admin' ? 'leaderboard' : 'quiz')
+        }
       } catch {
         localStorage.removeItem('user')
       }

@@ -12,13 +12,16 @@ function Login({ onLogin }) {
     setError('')
     setLoading(true)
 
+    const id = userId.trim()
+    const pass = password.trim()
+
     // Hardcoded demo/admin credentials always take precedence
-    if (userId === 'admin' && password === 'admin') {
+    if (id === 'admin' && pass === 'admin') {
       onLogin({ user_id: 'admin', name: 'Admin User', role: 'admin' })
       setLoading(false)
       return
     }
-    if (userId === 'demo' && password === 'demo') {
+    if (id === 'demo' && pass === 'demo') {
       onLogin({ user_id: 'demo', name: 'Demo Player', role: 'player' })
       setLoading(false)
       return
@@ -28,7 +31,7 @@ function Login({ onLogin }) {
       const { data, error: supaError } = await supabase
         .from('users')
         .select('*')
-        .eq('user_id', userId)
+        .eq('user_id', id)
         .single()
 
       if (supaError || !data) {
@@ -37,7 +40,7 @@ function Login({ onLogin }) {
         return
       }
 
-      if (data.password === password) {
+      if (data.password === pass) {
         onLogin({
           user_id: data.user_id,
           name: data.name || data.user_id,
